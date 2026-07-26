@@ -1,0 +1,12 @@
+{
+  "name": "Somme amigo",
+  "description": "Sommelier inteligente y gestor de cava. Analiza etiquetas de vino mediante IA, genera fichas técnicas, sugiere maridajes y permite llevar un registro personal de catas.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API",
+    "Vision Analysis",
+    "Personal Inventory Management"
+  ]
+}

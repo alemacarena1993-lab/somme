@@ -1,0 +1,30 @@
+{
+  "entities": {
+    "UserWineEntry": {
+      "title": "UserWineEntry",
+      "description": "Un registro de cata de vino en la cava del usuario",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "maxLength": 200 },
+        "winery": { "type": "string", "maxLength": 200 },
+        "grape": { "type": "string", "maxLength": 100 },
+        "vintage": { "type": "string", "maxLength": 50 },
+        "region": { "type": "string", "maxLength": 100 },
+        "subzone": { "type": "string", "maxLength": 100 },
+        "country": { "type": "string", "maxLength": 100 },
+        "userRating": { "type": "number" },
+        "userNotes": { "type": "string", "maxLength": 2000 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["id", "name", "winery", "grape", "vintage", "region", "country", "userId", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/wines/{wineId}": {
+      "schema": { "$ref": "#/entities/UserWineEntry" },
+      "description": "Colección global de registros de vinos de los usuarios"
+    }
+  }
+}

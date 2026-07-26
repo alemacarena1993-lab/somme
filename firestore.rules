@@ -1,0 +1,45 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidWine(data) {
+      return data.keys().hasAll(['id', 'name', 'winery', 'grape', 'vintage', 'region', 'country', 'userId', 'createdAt'])
+        && data.userId == request.auth.uid
+        && data.id is string && data.id.size() <= 128
+        && data.name is string && data.name.size() <= 200
+        && data.winery is string && data.winery.size() <= 200
+        && data.grape is string && data.grape.size() <= 100
+        && data.vintage is string && data.vintage.size() <= 50
+        && data.region is string && data.region.size() <= 100
+        && data.country is string && data.country.size() <= 100
+        && data.createdAt is number;
+    }
+
+    match /wines/{wineId} {
+      allow get, delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() 
+                    && isValidId(wineId) 
+                    && request.resource.data.userId == request.auth.uid 
+                    && isValidWine(request.resource.data);
+      allow update: if isSignedIn() 
+                    && isValidId(wineId) 
+                    && resource.data.userId == request.auth.uid 
+                    && request.resource.data.userId == request.auth.uid 
+                    && isValidWine(request.resource.data);
+    }
+  }
+}
