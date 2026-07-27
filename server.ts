@@ -12,7 +12,7 @@ app.use(express.json({ limit: "25mb" }));
 function getAIClient() {
   const apiKey = process.env.GEMINI_API_KEY || process.env.API_KEY;
   if (!apiKey || apiKey === "MY_GEMINI_API_KEY") {
-    throw new Error("No se encontró una GEMINI_API_KEY válida. Verifica la clave en el panel de Configuración / Secrets.");
+    throw new Error("No se encontró GEMINI_API_KEY. Si estás en Vercel, agrégala en Environment Variables de tu proyecto.");
   }
   return new GoogleGenAI({
     apiKey: apiKey,
@@ -227,4 +227,8 @@ async function startServer() {
   });
 }
 
-startServer();
+if (!process.env.VERCEL && !process.env.VERCEL_ENV) {
+  startServer();
+}
+
+export default app;
