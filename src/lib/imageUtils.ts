@@ -5,14 +5,14 @@ export interface ProcessedImageResult {
 }
 
 /**
- * Reads an image file asynchronously, resizes it using an HTML5 Canvas to a maximum width of 1024px,
+ * Reads an image file asynchronously, resizes it using an HTML5 Canvas to a maximum dimension of maxDim px,
  * compresses it to JPEG format, and returns the base64 URL, raw base64 string, and mimeType.
  * Uses URL.createObjectURL for memory efficiency on iOS/Android, with FileReader fallback.
  */
 export function processAndCompressImage(
   file: File,
-  maxWidth = 1024,
-  quality = 0.85
+  maxDim = 800,
+  quality = 0.80
 ): Promise<ProcessedImageResult> {
   return new Promise((resolve, reject) => {
     if (!file) {
@@ -31,9 +31,14 @@ export function processAndCompressImage(
           return;
         }
 
-        if (width > maxWidth) {
-          height = Math.round((height * maxWidth) / width);
-          width = maxWidth;
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
         }
 
         const canvas = document.createElement("canvas");

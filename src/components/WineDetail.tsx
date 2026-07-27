@@ -44,7 +44,7 @@ export default function WineDetail({ data, onSave, onClose, isSaved, onDelete }:
     const file = e.target.files?.[0];
     if (!file) return;
     try {
-      const { base64Url } = await processAndCompressImage(file, 1024, 0.85);
+      const { base64Url } = await processAndCompressImage(file, 800, 0.80);
       setWineData(prev => ({
         ...prev,
         imageUrl: base64Url

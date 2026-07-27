@@ -33,8 +33,8 @@ export default function Scanner({ onScanComplete }: ScannerProps) {
     setError(null);
 
     try {
-      // Safely process and compress image to 1024px JPEG asynchronously
-      const { base64Url, base64Data, mimeType } = await processAndCompressImage(file, 1024, 0.85);
+      // Safely process and compress image to 800px JPEG asynchronously
+      const { base64Url, base64Data, mimeType } = await processAndCompressImage(file, 800, 0.80);
       setPreview(base64Url);
 
       const result = await analyzeWineLabel(base64Data, mimeType);

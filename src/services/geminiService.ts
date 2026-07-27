@@ -8,8 +8,15 @@ export async function analyzeWineLabel(base64Image: string, mimeType: string = "
   });
 
   if (!res.ok) {
-    const errorData = await res.json().catch(() => ({}));
-    throw new Error(errorData.error || "Error al analizar la etiqueta");
+    let errorMsg = "";
+    try {
+      const errorData = await res.json();
+      errorMsg = errorData.error || errorData.message;
+    } catch {
+      const text = await res.text().catch(() => "");
+      errorMsg = text || `Error del servidor (${res.status} ${res.statusText})`;
+    }
+    throw new Error(errorMsg || "No pudimos analizar la etiqueta. Intenta tomar una foto más nítida.");
   }
 
   return await res.json();
@@ -23,8 +30,15 @@ export async function analyzeWineByQuery(searchQuery: string): Promise<Technical
   });
 
   if (!res.ok) {
-    const errorData = await res.json().catch(() => ({}));
-    throw new Error(errorData.error || "Error al buscar el vino");
+    let errorMsg = "";
+    try {
+      const errorData = await res.json();
+      errorMsg = errorData.error || errorData.message;
+    } catch {
+      const text = await res.text().catch(() => "");
+      errorMsg = text || `Error del servidor (${res.status} ${res.statusText})`;
+    }
+    throw new Error(errorMsg || "No pudimos obtener la información del vino.");
   }
 
   return await res.json();
